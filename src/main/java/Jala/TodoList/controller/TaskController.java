@@ -18,19 +18,31 @@ public class TaskController {
 
     @PostMapping("/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask (@RequestBody Task task){
+    public Task createTask(@RequestBody Task task) {
         return taskService.createtask(task);
     }
 
     @GetMapping("/tasks")
     @ResponseStatus(HttpStatus.OK)
-    public List<Task> getAllTasks(){
+    public List<Task> getAllTasks() {
         return taskService.listAllTasks();
     }
 
     @GetMapping("/tasks/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Task> getTaskById(@PathVariable (value = "id") Long Id){
+    public ResponseEntity<Task> getTaskById(@PathVariable(value = "id") Long Id) {
         return taskService.findTaskById(Id);
+    }
+
+    @PutMapping("/tasks/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Task> getTaskById(@PathVariable(value = "id") Long Id, @RequestBody Task task) {
+        return taskService.updateTaskById(task, Id);
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Object> deleteById(@PathVariable(value = "id") Long Id) {
+        return taskService.deleteById(Id);
     }
 }
