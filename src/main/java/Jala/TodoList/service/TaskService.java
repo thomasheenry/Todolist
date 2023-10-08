@@ -1,13 +1,10 @@
 package Jala.TodoList.service;
 
 import Jala.TodoList.model.Task;
-import Jala.TodoList.repository.TaskRepository;
-import jakarta.persistence.Id;
+import Jala.TodoList.repository.MongoTaskRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,42 +13,37 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskService {
 
-    private TaskRepository taskRepository;
+    private final MongoTaskRepository mongoTaskRepository;
 
-    public Task createtask(Task task) {
-        return taskRepository.save(task);
+    public Task createTask(Task task) {
+        return mongoTaskRepository.save(task);
     }
 
-    // método listar tarefas
     public List<Task> listAllTasks() {
-        return taskRepository.findAll();
+        return mongoTaskRepository.findAll();
     }
 
-    // buscar tarefa por ID
-    public ResponseEntity<Task> findTaskById(Long Id) {
-        return taskRepository.findById(Id)
-                .map(task -> ResponseEntity.ok().body(task))
-                .orElse(ResponseEntity.notFound().build());
+    public Task findTaskById(String id) {
+        return mongoTaskRepository.findById(id).orElse(null);
     }
 
-    // método atualizar tarefa
-    public ResponseEntity<Task> updateTaskById(Task task, Long Id) {
-        return taskRepository.findById(Id)
-                .map(taskToUpdate -> {
-                    taskToUpdate.setTitle(task.getTitle());
-                    taskToUpdate.setDescription(task.getDescription());
-                    taskToUpdate.setDeadLine(task.getDeadLine());
-                    Task updated = taskRepository.save(taskToUpdate);
-                    return ResponseEntity.ok().body(updated);
-                }).orElse(ResponseEntity.notFound().build());
+    public Task updateTaskById(String id, Task newTask) {
+        Task existingTask = mongoTaskRepository.findById(id).orElse(null);
+        if (existingTask != null) {
+            existingTask.setTitle(newTask.getTitle());
+            existingTask.setDescription(newTask.getDescription());
+            existingTask.setDeadLine(newTask.getDeadLine());
+            return mongoTaskRepository.save(existingTask);
+        }
+        return null;
     }
 
-    // método deletar tarefa
-    public ResponseEntity<Object> deleteById(Long Id) {
-        return taskRepository.findById(Id)
-                .map(taskToDelete -> {
-                    taskRepository.deleteById(Id);
-                    return ResponseEntity.noContent().build();
-                }).orElse(ResponseEntity.notFound().build());
+    public boolean deleteById(String id) {
+        Task existingTask = mongoTaskRepository.findById(id).orElse(null);
+        if (existingTask != null) {
+            mongoTaskRepository.delete(existingTask);
+            return true;
+        }
+        return false;
     }
 }
