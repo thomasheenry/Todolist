@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final MongoUserRepository mongoUserRepository;
     public User createUser(User user){
+        User existingUser = mongoUserRepository.findById(user.get_id()).orElse(null);
+        if(existingUser != null){
+            System.out.println("Usuário existente");
+            throw new IllegalArgumentException();
+        }
         return mongoUserRepository.save(user);
     }
     public User findUserbyId(String id){

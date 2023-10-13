@@ -3,26 +3,21 @@ package Jala.TodoList.service;
 import Jala.TodoList.model.Task;
 import Jala.TodoList.repository.MongoTaskRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class    TaskService {
+public class TaskService {
 
     private final MongoTaskRepository mongoTaskRepository;
 
     public Task createTask(String userId, Task task) {
-        task.setUser_id(userId);
+        task.setUserId(userId);
+        task.setStatus(false);
         return mongoTaskRepository.save(task);
     }
 
-    public List<Task> listAllTasks() {
-        return mongoTaskRepository.findAll();
-    }
 
     public Task findTaskById(String id) {
         return mongoTaskRepository.findById(id).orElse(null);
@@ -46,5 +41,9 @@ public class    TaskService {
             return true;
         }
         return false;
+    }
+
+    public List<Task> listAllTasksByUserId(String userId) {
+        return mongoTaskRepository.findByUserId(userId);
     }
 }

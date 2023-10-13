@@ -27,9 +27,9 @@
 
         @GetMapping("/tasks")
         @ResponseStatus(HttpStatus.OK)
-        public List<Task> getAllTasks() {
+        public List<Task> getAllTasks(@PathVariable(value = "userId") String userId) {
             log.info("Listando todas as tarefas cadastradas");
-            return taskService.listAllTasks();
+            return taskService.listAllTasksByUserId(userId);
         }
 
         @GetMapping("/tasks/{id}")

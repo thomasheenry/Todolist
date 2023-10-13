@@ -24,7 +24,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> g (@PathVariable(value = "id") String id) {
@@ -53,7 +52,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") String id,
                                              @RequestParam(value = "email") String email,
-                                             @RequestParam(value = "senha") String senha) {
+                                             @RequestParam(value = "password") String senha) {
         log.info("Excluindo usuário com o nome [{}]", id);
         boolean deleted = userService.deleteUser(id, email, senha);
         if (deleted) {
@@ -62,5 +61,4 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }
