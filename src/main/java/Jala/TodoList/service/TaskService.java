@@ -11,11 +11,12 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class TaskService {
+public class    TaskService {
 
     private final MongoTaskRepository mongoTaskRepository;
 
-    public Task createTask(Task task) {
+    public Task createTask(String userId, Task task) {
+        task.setUser_id(userId);
         return mongoTaskRepository.save(task);
     }
 

@@ -11,7 +11,7 @@
     import java.util.List;
 
     @RestController
-    @RequestMapping("/api/v1")
+    @RequestMapping("/api/v1/user/{userId}")
     @AllArgsConstructor
     @Slf4j
     public class TaskController {
@@ -20,9 +20,9 @@
 
         @PostMapping("/tasks")
         @ResponseStatus(HttpStatus.CREATED)
-        public Task createTask(@RequestBody Task task) {
+        public Task createTask(@PathVariable(value = "userId") String userId, @RequestBody Task task) {
             log.info("Criando uma nova Tarefa com as informações [{}]", task);
-            return taskService.createTask(task);
+            return taskService.createTask(userId, task);
         }
 
         @GetMapping("/tasks")

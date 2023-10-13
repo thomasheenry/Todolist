@@ -17,10 +17,13 @@ import java.time.LocalDateTime;
 public class Task {
 
     @Id
-    private String id;
+    private String _id;
+
+    private String user_id;
 
     private String title;
     private String description;
+    private String status;
     private LocalDateTime deadLine;
 
     @CreatedDate
