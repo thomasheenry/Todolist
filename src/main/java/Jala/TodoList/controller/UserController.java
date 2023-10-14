@@ -36,7 +36,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") String id, @RequestBody User user) {
         log.info("Atualizando o User [{}], as novas informações são: [{}]", id, user);
